@@ -29,8 +29,8 @@ so what's the new desing?
 the new desgin has two parts: front and backend , so it cares nothing about the GUI. 
 and i can play medias under command line.and it's easy to add a GUI with GTK ot QT.
 all these is desided by the uses.
-the structure must easy for threads communicate with each other.
-there must some UNIX  domain socket of pipe communication.
+the structure must be easy for threads communicate with each other.
+there must some UNIX  domain socket or pipe communication.
 
 socket and pipe is not CPU time COST.
 and i need to define a protocol with necessary commands to control the backend.
