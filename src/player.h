@@ -6,17 +6,16 @@
 
 class Player {
 public : 
-    QObject *parent;
-    Player(QObject *parent);
-    Player(QObject *parent, QString path);
-    Player(QObject *parent, QStringList paths);
+    Player();
+//    Player(QString path, QObject *parent = NULL);
+//    Player(QStringList paths, QObject *parent = NULL);
     
     QMediaPlayer *player ;
     QMediaPlaylist *playlist;
     
-    void initPlayer(int volume = 30);
-    static QMediaPlayer *getPlayer() const;
-    static QMediaPlaylist *getPlaylist() const;
+    void initPlayer(int volume = 5);
+    QMediaPlayer *getPlayer();
+    QMediaPlaylist *getPlaylist();
 };
 
 

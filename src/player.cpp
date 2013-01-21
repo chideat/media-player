@@ -1,14 +1,13 @@
 #include "player.h"
-#include <stdio.h>
-#include <QUrl>
+
 /**
  * @brief Player::Player
  * @param parent
  */
-Player::Player(QObject *parent) {
-    this->parent = parent;
-    player = new QMediaPlayer(parent);
-    playlist = new QMediaPlaylist(parent);
+Player::Player() {
+    player = new QMediaPlayer(NULL);
+    playlist = new QMediaPlaylist(NULL);
+    player->setPlaylist(playlist);
     
     initPlayer();
 }
@@ -19,30 +18,35 @@ Player::Player(QObject *parent) {
  * @param path
  * @problems how to play a media from path
  */
-Player::Player(QObject *parent, QString path) : Player(parent){
-    /* apperent just support local file */
-    player->setMedia(QUrl::fromLocalFile(path));
-    /* the default action is play */
-    player->play();
-}
+//Player::Player(QString path, QObject *parent) : Player(parent){
+//    /* apperent just support local file */
+//    player->setMedia(QUrl::fromLocalFile(path));
+//    /* the default action is play */
+//    player->play();
+//}
 
-Player::Player(QObject *parent, QStringList paths):Player(parent) {
-    
-}
+/* load medias */
+//Player::Player(QStringList paths, QObject *parent):Player(parent) {
+//    foreach(QString path, paths)
+//        playlist->addMedia(QUrl::fromLocalFile(path));
+//    player->setPlaylist(playlist);
+//    player->play();
+//}
 
+/* give up load the play history */
 void Player::initPlayer(int volume) {
     player->setVolume(volume);
 }
 
-static QMediaPlayer* Player::getPlayer() {
+QMediaPlayer* Player::getPlayer()  {
     if(player == NULL)
-        player = new QMediaPlayer(parent);
+        player = new QMediaPlayer(NULL);
     return player;
 }
 
-static QMediaPlaylist* Player::getPlaylist() {
+QMediaPlaylist *Player::getPlaylist() {
     if(playlist == NULL)
-        playlist = new QMediaPlaylist(parent);
+        playlist = new QMediaPlaylist(NULL);
     return playlist;
 }
- 
+

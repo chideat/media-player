@@ -16,7 +16,8 @@ SOURCES += \
     src/main.cpp \
     src/player.cpp \
     src/load.cpp \
-    src/playlist.cpp
+    src/playlist.cpp \
+    src/window.cpp
 
 HEADERS += \ 
     src/player.h \

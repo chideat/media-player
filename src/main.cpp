@@ -1,15 +1,17 @@
 #include "player.h"
 #include "load.h"
-#include <QtWidgets/QWidget>
-#include <QtWidgets/QApplication>
-#include <QDir>
+#include "window.h"
+
+#include <QWidget>
+#include <QApplication>
 
 int main(int argc, char **argv) {
     QApplication app(argc, argv);
-    
-    QWidget *widget = new QWidget;
-    Player *player = new Player(widget, "/home/thinking/Music/1.mp3");
-
-    widget->show();
+    Window *window = new Window;
+    // in steps
+    char **playlist = (argc > 1 ? argv + 1 : NULL);
+    window->setPlayer(new Player());
+    window->initPlaylist(argc - 1, playlist);
+    window->show();
     return app.exec();
 }
