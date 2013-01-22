@@ -3,6 +3,7 @@
 #include <QByteArray>
 
 Window::Window(QWidget *parent):QWidget(parent) {
+    setWindowTitle(tr("media-player"));
     UI();
     
 }

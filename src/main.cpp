@@ -6,6 +6,8 @@
 #include <QApplication>
 
 int main(int argc, char **argv) {
+    QTextCodec::codecForName("UTF-8");
+    
     QApplication app(argc, argv);
     Window *window = new Window;
     // in steps
