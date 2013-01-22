@@ -1,6 +1,14 @@
 #include "window.h"
 #include <QVBoxLayout>
-#include <QByteArray>
+#include <QHBoxLayout>
+#include <QGridLayout>
+
+#include <fileref.h>
+#include <mpegfile.h>
+#include <id3v2tag.h>
+#include <id3v2header.h>
+#include <attachedpictureframe.h>
+#include <apetag.h>
 
 Window::Window(Player *player, QWidget *parent):QWidget(parent) {
     this->player = player->getPlayer();
@@ -9,7 +17,7 @@ Window::Window(Player *player, QWidget *parent):QWidget(parent) {
     setWindowTitle(tr("media-player"));
     UI();
     
-    volume->setRange(0, 100);
+    volume->setRange(0, 50);
     connection();
 }
 
@@ -27,13 +35,24 @@ bool Window::initWindow() {
 }
 
 bool Window::initPlaylist(int argc, char **argv) {
-    QUrl url;
     for(int i = 0; i < argc; i ++) {
-        url.setPath(QString::fromLatin1(argv[i]));
-        if(url.isValid()) {
-            /* add to playlist */
-            playlist->addMedia(QUrl::fromLocalFile(QString::fromUtf8(argv[i])));
+        QFileInfo fileInfo(argv[i]);
+        TagLib::FileRef file(fileInfo.absoluteFilePath().toUtf8());
+        //QPixmap pix;
+        if(!file.isNull()) {
+            if(file.tag() == NULL || file.audioProperties() == NULL)
+                continue;
+            QTableWidgetItem *song = new QTableWidgetItem(file.tag()->title().isNull() ? tr("%1").arg(fileInfo.baseName().trimmed()) : tr(file.tag()->title().toCString(true)));
+            song->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+            QTableWidgetItem *singer = new QTableWidgetItem(file.tag()->artist().isNull() ?  tr("...") : tr(file.tag()->artist().toCString(true)));
+            singer->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
+            /* add to playlist */ 
+            int rowCount = taglistWidget->rowCount(); 
+            taglistWidget->insertRow (rowCount);
+            taglistWidget->setItem (rowCount, 0, song);
+            taglistWidget->setItem (rowCount, 1, singer);
             
+            playlist->addMedia(QUrl::fromLocalFile(QString::fromUtf8(argv[i])));
         }
     }
     if(!playlist->isEmpty()) {
@@ -58,17 +77,17 @@ void Window::UI() {
     //videoWidget = new QVideoWidget(this);
     videoWidget = new QWidget(this);
     toolWidget = new QWidget(this);
-    toolWidget->setFixedSize(750, 60);
-    taglistWidget = new QWidget(this);
-    tabWidget = new QWidget(this);
+    toolWidget->setFixedSize(720, 60);
+    
+    infoWidget = new QWidget(this);
+    taglistWidget = new QTableWidget(0, 2, this);
+    tabWidget = new QTabWidget(this);
     menuWidget = new QWidget(this);
     
-    //widgets
+    //widgets left
     vLLayout->addWidget(videoWidget);
     vLLayout->addWidget(toolWidget);
-    vRLayout->addWidget(tabWidget);
-    vRLayout->addWidget(taglistWidget);
-    vRLayout->addWidget(menuWidget);
+
     
     //toolwidget
     QGridLayout *gLayout = new QGridLayout;
@@ -108,16 +127,16 @@ void Window::UI() {
     mute = new QToolButton(this);
     mute->setIcon(QIcon(":/16x16/volume-medium.png"));
     mute->setIconSize(QSize(16, 16));
-    mute->setStyleSheet ("QToolButton{border:0;}");
-    mute->setCheckable(true);
-    mute->setChecked(true);
-    
+    mute->setStyleSheet ("QToolButton {border:0;}");
+//    mute->setCheckable(true);
+//    mute->setChecked(false);
+    isMuted = false;
     volume = new QSlider(Qt::Horizontal, this);
     title = new QLabel(tr("media-player"));
     lib = new QToolButton(this);
     lib->setIcon(QIcon(":/16x16/library.png"));
     lib->setIconSize(QSize(16, 16));
-    lib->setStyleSheet("QToolButton{border:0;}");
+    lib->setStyleSheet("QToolButton {border:0;}");
 
     pLayout->setSpacing(0);
     vLayout->setSpacing(0);
@@ -141,6 +160,39 @@ void Window::UI() {
     volume->setAcceptDrops(true);
     
     
+    //right widgets
+    vRLayout->addWidget(infoWidget);
+    infoWidget->setFixedHeight(80);
+    vRLayout->addWidget(tabWidget);
+    tabWidget->addTab(taglistWidget, tr("默认列表"));
+    vRLayout->addWidget(menuWidget);
+    menuWidget->setFixedHeight(45);
+    
+    
+    taglistWidget->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
+    taglistWidget->resizeRowsToContents();
+    taglistWidget->setContentsMargins(0,0,0,0);
+    taglistWidget->setColumnWidth(0, 180);
+    taglistWidget->setColumnWidth(1,65);
+//    taglistWidget->setColumnWidth(2,85);
+//    taglistWidget->setColumnWidth(3,60);
+//    taglistWidget->setColumnHidden(4,true);
+    taglistWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    taglistWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+    taglistWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    taglistWidget->setShowGrid(false);
+    taglistWidget->setAlternatingRowColors(true);
+    taglistWidget->setAutoScroll(true);
+    taglistWidget->setAutoScrollMargin(0);
+    taglistWidget->setWordWrap(false);
+//    setHorizontalScrollBar(Qt::ScrollBarAlwaysOff);
+//    horizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    taglistWidget->horizontalHeader()->setVisible(false);
+    taglistWidget->verticalHeader()->setVisible(false);
+    taglistWidget->verticalScrollBar()->setStyleSheet("QScrollBar:vertical {border:0px solid grey;width:4px;background:#888888;}");
+    taglistWidget->setStyleSheet("QTableView:Item{selection-background-color: #DADADA}");
+   // tabWidget->setStyleSheet("QTabWidget {border:1px;}");
+    //taglistWidget->setStyleSheet("QTableWidget {border:0;}");
 }
 
 void Window::connection() {
@@ -154,25 +206,54 @@ void Window::connection() {
     connect(next, &QToolButton::pressed, playlist, &QMediaPlaylist::next);
     connect(volume, &QSlider::sliderMoved, player, &QMediaPlayer::setVolume);
     connect(volume, &QSlider::sliderMoved, [=](int val){
-        if(val >= 80)
+        if(val >= 40)
             mute->setIcon(QIcon(":/16x16/volume-high.png"));
-        else if(val >= 40)
+        else if(val >= 20)
             mute->setIcon(QIcon(":/16x16/volume-medium.png"));
-        else if(val >= 10)
+        else if(val >= 5)
             mute->setIcon(QIcon(":/16x16/volume-low.png"));
         else 
             mute->setIcon(QIcon(":/16x16/volume-zero.png"));
     });
     connect(mute, &QToolButton::released, [=](){
-        if(mute->isChecked()) {
-            mute->setChecked(false);
+        if(isMuted) {
+            //mute->setChecked(false);
+            isMuted = false;
             player->setMuted(false);
+            mute->setIcon(icon);
         }
         else {
-            mute->setChecked(true);
+//            mute->setChecked(true);
+            isMuted = true;
             player->setMuted(true);
+            icon = mute->icon();
+            mute->setIcon(QIcon(":/16x16/volume-muted.png"));
         }
     });
+    connect(play, &QToolButton::released, [=](){
+        if(isPlaying) {
+            player->pause();
+            isPlaying = false;
+        }
+        else {
+            player->play();
+            isPlaying = true;
+        }
+    });
+    connect(player, &QMediaPlayer::stateChanged, [=](QMediaPlayer::State newState){
+        switch(newState) {
+        case QMediaPlayer::PlayingState :
+            play->setIcon(QIcon(":/24x24/pause.png"));
+            isPlaying = true;
+            break;
+        case QMediaPlayer::PausedState:
+        case QMediaPlayer::StoppedState:
+            play->setIcon(QIcon(":/24x24/play.png"));
+            isPlaying = false;
+            break;
+        }
+    });
+    //connect(tab, &QTabWidget::currentChanged)
 }
 
 void Window::setPorcessPosition(qint64 val) {
@@ -186,4 +267,45 @@ void Window::setPorcessPosition(qint64 val) {
 
 void Window::currentMediaChanged(const QMediaContent &media) {
     process->setValue(0);
+    metaData(media.canonicalUrl());
+}
+
+void Window::metaData(QUrl url) {
+    QString path = url.path();
+    if(!path.isNull() && !path.isEmpty()){
+            QFileInfo fileInfo(path);
+            //here update the picture
+            TagLib::MPEG::File file(fileInfo.absoluteFilePath().toUtf8());
+            //QPixmap pix;
+            if(file.isValid()) {
+                this->title->setText(file.tag()->title().isNull() ? tr("%1").arg(fileInfo.baseName()) : tr(file.tag()->title().toCString(true)));
+                //get attached picture
+//                ID3v2::FrameList pictures = file.ID3v2Tag()->frameListMap()["APIC"];
+//                if(!pictures.isEmpty()) {
+//                    TagLib::ID3v2::AttachedPictureFrame *tmp = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(pictures.front());
+//                    size_t size = tmp->picture().size();
+//                    pix.loadFromData((const unsigned char *)tmp->picture().data(),size,"JPEG");
+//                    pix = pix.scaled(96,96,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+//                    picture->setPixmap(pix);
+//                }
+//                else {
+//                    pix.load(":/default.png","PNG");
+//                    pix = pix.scaled(96,96,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+//                    picture->setPixmap(pix);
+//                }
+            }
+            else {
+                title->setText (tr("%1").arg (fileInfo.baseName()));
+//                pix.load(":/default.png","PNG");
+//                pix = pix.scaled(96,96,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+//                picture->setPixmap(pix);
+            }
+        }
+//        else {
+//            /*do nothing*/
+//        }
+}
+
+void Window::closeEvent(QCloseEvent *event) {
+    event->accept();
 }

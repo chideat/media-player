@@ -1,9 +1,8 @@
-LIBS += -L/usr/lib/ -ltag
-INCLUDEPATH += /usr/include/taglib/
-
-
 QT += multimedia widgets
 QMAKE_CXXFLAGS += -std=c++0x
+
+LIBS += -L/usr/lib/ -ltag
+INCLUDEPATH += /usr/include/taglib/
 
 OBJECTS_DIR = ./object
 MOC_DIR = ./moc
@@ -17,14 +16,17 @@ SOURCES += \
     src/player.cpp \
     src/load.cpp \
     src/playlist.cpp \
-    src/window.cpp
+    src/window.cpp \
+    src/list.cpp
 
 HEADERS += \ 
     src/player.h \
     src/load.h \
     src/playlist.h \
-    src/window.h
+    src/window.h \
+    src/list.h
 
 RESOURCES += src/img/icons.qrc
 
-OTHER_FILES +=
+OTHER_FILES += \
+    doc/log.txt

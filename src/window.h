@@ -19,13 +19,20 @@ private:
     QMediaPlayer *player;
     QMediaPlaylist *playlist;
     
-    QWidget *videoWidget, *toolWidget, *taglistWidget, *tabWidget, *menuWidget;
+    QWidget *videoWidget, *toolWidget, *menuWidget, *infoWidget;
+    QTableWidget *taglistWidget;
+    QTabWidget *tabWidget; 
     //QVideoWidget *videoWidget;
     
     QToolButton *previous;
     QToolButton *next;
     QToolButton *play;
+    /*tmp*/
+    bool isPlaying;
     
+    /*tmp*/
+    bool isMuted;
+    QIcon icon;
     QToolButton *mute;
     QSlider *volume;
     QSlider *process;
@@ -38,7 +45,8 @@ private:
 public slots:
     void setPorcessPosition(qint64 val);
     void currentMediaChanged(const QMediaContent &media);
-    
+    void metaData(QUrl url);
+    void closeEvent(QCloseEvent *);
 };
 
 #endif // WINDOW_H
