@@ -9,10 +9,9 @@ int main(int argc, char **argv) {
     QTextCodec::codecForName("UTF-8");
     
     QApplication app(argc, argv);
-    Window *window = new Window;
+    Window *window = new Window(new Player);
     // in steps
     char **playlist = (argc > 1 ? argv + 1 : NULL);
-    window->setPlayer(new Player());
     window->initPlaylist(argc - 1, playlist);
     window->show();
     return app.exec();

@@ -3,7 +3,7 @@ INCLUDEPATH += /usr/include/taglib/
 
 
 QT += multimedia widgets
-CONFIG += c++11
+QMAKE_CXXFLAGS += -std=c++0x
 
 OBJECTS_DIR = ./object
 MOC_DIR = ./moc

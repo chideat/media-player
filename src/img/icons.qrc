@@ -31,5 +31,15 @@
         <file>16x16/singal.png</file>
         <file>16x16/repeatsingal.png</file>
         <file>16x16/default.png</file>
+        <file>24x24/volume-high.png</file>
+        <file>24x24/volume-low.png</file>
+        <file>24x24/volume-medium.png</file>
+        <file>24x24/volume-muted.png</file>
+        <file>24x24/volume-zero.png</file>
+        <file>16x16/volume-high.png</file>
+        <file>16x16/volume-low.png</file>
+        <file>16x16/volume-medium.png</file>
+        <file>16x16/volume-muted.png</file>
+        <file>16x16/volume-zero.png</file>
     </qresource>
 </RCC>

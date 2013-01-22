@@ -7,8 +7,7 @@
 Player::Player() {
     player = new QMediaPlayer(NULL);
     playlist = new QMediaPlaylist(NULL);
-    player->setPlaylist(playlist);
-    
+    //player->setPlaylist(playlist);
     initPlayer();
 }
 

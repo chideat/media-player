@@ -11,10 +11,10 @@
 class Window : public QWidget {
     Q_OBJECT
 public: 
-    Window(QWidget *parent = NULL);
-    void setPlayer(Player *player);
+    Window(Player *player, QWidget *parent = NULL);
     bool initWindow();
     bool initPlaylist(int argc, char **argv);
+
 private:
     QMediaPlayer *player;
     QMediaPlaylist *playlist;
@@ -29,12 +29,16 @@ private:
     QToolButton *mute;
     QSlider *volume;
     QSlider *process;
+    QLabel *time;
+    QLabel *title;
+    QToolButton *lib;
     
-    
-    
-    
-    
+    void connection();
     void UI();
+public slots:
+    void setPorcessPosition(qint64 val);
+    void currentMediaChanged(const QMediaContent &media);
+    
 };
 
 #endif // WINDOW_H
