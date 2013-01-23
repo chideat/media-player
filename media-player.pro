@@ -1,5 +1,6 @@
-QT += multimedia widgets
 QMAKE_CXXFLAGS += -std=c++0x
+
+QT += multimedia  widgets webkitwidgets
 
 LIBS += -L/usr/lib/ -ltag
 INCLUDEPATH += /usr/include/taglib/
@@ -15,18 +16,18 @@ SOURCES += \
     src/main.cpp \
     src/player.cpp \
     src/load.cpp \
-    src/playlist.cpp \
     src/window.cpp \
     src/list.cpp
 
 HEADERS += \ 
     src/player.h \
     src/load.h \
-    src/playlist.h \
     src/window.h \
-    src/list.h
+    src/list.h \
+    src/menu.h
 
-RESOURCES += src/img/icons.qrc
+RESOURCES += src/img/icons.qrc \
+    src/xml/html.qrc
 
 OTHER_FILES += \
     doc/log.txt

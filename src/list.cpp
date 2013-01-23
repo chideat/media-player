@@ -1,80 +1,46 @@
 #include "list.h"
-#include <stdlib.h>
-#include <QTableWidgetItem>
-#include <QAbstractItemView>
-#include <QVBoxLayout>
-#include <QHeaderView>
-#include <QTableView>
-#include <QScrollBar>
+#include <QFile>
+#include <QFileInfo>
+#include <QWebView>
+#include <QWebFrame>
+#include <tag.h>
 #include <fileref.h>
+#include <mpegheader.h>
 #include <mpegfile.h>
-#include <id3v2tag.h>
-#include <id3v2header.h>
-#include <attachedpictureframe.h>
-#include <apetag.h>
+#include <QDebug>
 
-List::List(QWidget *parent) : QTableWidget(0, 2, parent) {
-    setView();
-}
-void List::setView(){
-    //init table
-    setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
-    resizeRowsToContents();
-    setContentsMargins(0,0,0,0);
-    setColumnWidth(0,180);
-    setColumnWidth(1,65);
-    setSelectionMode(QAbstractItemView::SingleSelection);
-    setSelectionBehavior(QAbstractItemView::SelectRows);
-    setEditTriggers(QAbstractItemView::NoEditTriggers);
-    setShowGrid(false);
-    setAlternatingRowColors(true);
-    setAutoScroll(true);
-    setAutoScrollMargin(0);
-    setWordWrap(false);
-//    setHorizontalScrollBar(Qt::ScrollBarAlwaysOff);
-//    horizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    horizontalHeader()->setVisible(false);
-    verticalHeader()->setVisible(false);
-    verticalScrollBar()->setStyleSheet("QScrollBar:vertical {border:0px solid grey;width:4px;background:#888888;}");
-    setStyleSheet("QTableView:Item{selection-background-color: #DADADA}");
-        //行背景色
+List::List(QWidget *parent) : QWidget(parent) {
+    view = new QWebView(this);
+    view->page()->settings()->setAttribute(QWebSettings::JavascriptEnabled, true);
+    view->setFixedWidth(270);
+    view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //load html
 
-    initConnect();
+    
+    frame = view->page()->mainFrame();
+    connect(frame, &QWebFrame::javaScriptWindowObjectCleared, [=](){
+        frame->addToJavaScriptWindowObject(QString("List"), this);
+    });
+    QFile file(":/list.html");
+    file.open(QIODevice::ReadOnly);
+    view->setHtml(file.readAll());
+    file.close();
 }
 
-void List::initConnect() {
-    connect(this,SIGNAL(cellDoubleClicked(int,int)),this,SLOT(rowClicked(int,int)));
-}
-
-void List::scrollToRow() {
-//    setCurrentCell (list->indexOf(currentID),1);
-//    scrollToItem (itemAt (list->indexOf(currentID),1));
-}
-
-bool List::remove(qint32 id) {
-//    if(id < 0 || id >= rowCount())
-//        return false;
-//    removeRow(id);
-//    list->removeAt(id);
-//    return true;
-}
-
-bool List::addItem(char *argv) {
-    QFileInfo fileInfo(argv);
+bool List::addItem(char *argv, int playList) {
+    if(argv == NULL) return false;
+    QFileInfo fileInfo(QString::fromUtf8(argv));
     TagLib::FileRef file(fileInfo.absoluteFilePath().toUtf8());
-    //QPixmap pix;
     if(!file.isNull()) {
         if(file.tag() == NULL || file.audioProperties() == NULL)
             return false;
-        QTableWidgetItem *song = new QTableWidgetItem(file.tag()->title().isNull() ? tr("%1").arg(fileInfo.baseName().trimmed()) : tr(file.tag()->title().toCString(true)));
-        song->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        QTableWidgetItem *singer = new QTableWidgetItem(file.tag()->artist().isNull() ?  tr("...") : tr(file.tag()->artist().toCString(true)));
-        singer->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
-        /* add to playlist */ 
-        int rowCount = taglistWidget->rowCount(); 
-        taglistWidget->insertRow (rowCount);
-        taglistWidget->setItem (rowCount, 0, song);
-        taglistWidget->setItem (rowCount, 1, singer);
+        frame->evaluateJavaScript(tr("addMedia(\"<tr class='row' id='10'><td class='media'>%2</td><td class='arctist'>%1</td></tr>\")")
+                                  .arg(file.tag()->artist().isNull() ?  tr("...") : tr(file.tag()->artist().toCString(true)))
+                                  .arg(file.tag()->title().isNull() ? tr("%1").arg(fileInfo.baseName().trimmed()) : tr(file.tag()->title().toCString(true))));
     }
     return true;
+}
+
+void List::play(const QString &id) {
+    qDebug()<<"asdfasdf";
 }

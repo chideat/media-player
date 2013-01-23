@@ -1,31 +1,19 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include "load.h"
 #include <QWidget>
-#include <QTableWidget>
-#include <QFileInfo>
+class QWebView;
+class QWebFrame;
 
-class List :public QTableWidget {
+class List : public QWidget {
     Q_OBJECT
 public :
-    List(QWidget *parent);
-    QList<qint32> *list;
+    List(QWidget *parent = NULL);
 private :
-    Load *load;
-
-    void setView();
-    void initConnect();
-    QString getPath(qint32 id);
-    qint32 getRandom();
-    void scrollToRow();
+    QWebView *view;
+    QWebFrame *frame;
 public slots:
-    bool remove(qint32);
-    //void setLoad(LoadType type, QString path);
-    void rowClicked(int r, int);
-    bool addItem(char *argv);
-signals :
-    void next(QString path);
-    void jump(QString path);
+    bool addItem(char *argv, int playList = 0);
+    void play(const QString &id);
 };
 #endif // LIST_H

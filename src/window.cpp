@@ -13,7 +13,6 @@
 Window::Window(Player *player, QWidget *parent):QWidget(parent) {
     this->player = player->getPlayer();
     this->playlist = player->getPlaylist();
-    
     setWindowTitle(tr("media-player"));
     UI();
     
@@ -36,22 +35,7 @@ bool Window::initWindow() {
 
 bool Window::initPlaylist(int argc, char **argv) {
     for(int i = 0; i < argc; i ++) {
-        QFileInfo fileInfo(argv[i]);
-        TagLib::FileRef file(fileInfo.absoluteFilePath().toUtf8());
-        //QPixmap pix;
-        if(!file.isNull()) {
-            if(file.tag() == NULL || file.audioProperties() == NULL)
-                continue;
-            QTableWidgetItem *song = new QTableWidgetItem(file.tag()->title().isNull() ? tr("%1").arg(fileInfo.baseName().trimmed()) : tr(file.tag()->title().toCString(true)));
-            song->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-            QTableWidgetItem *singer = new QTableWidgetItem(file.tag()->artist().isNull() ?  tr("...") : tr(file.tag()->artist().toCString(true)));
-            singer->setTextAlignment(Qt::AlignCenter | Qt::AlignVCenter);
-            /* add to playlist */ 
-            int rowCount = taglistWidget->rowCount(); 
-            taglistWidget->insertRow (rowCount);
-            taglistWidget->setItem (rowCount, 0, song);
-            taglistWidget->setItem (rowCount, 1, singer);
-            
+        if(listWidget->addItem(argv[i])) {
             playlist->addMedia(QUrl::fromLocalFile(QString::fromUtf8(argv[i])));
         }
     }
@@ -70,18 +54,24 @@ void Window::UI() {
     //layout
     QHBoxLayout *layout = new QHBoxLayout(this);
     setLayout(layout);
+    layout->setSpacing(0);
+    layout->setMargin(3);
+    
     QVBoxLayout *vLLayout = new QVBoxLayout;
     QVBoxLayout *vRLayout = new QVBoxLayout;
     layout->addLayout(vLLayout);
     layout->addLayout(vRLayout);
     //videoWidget = new QVideoWidget(this);
-    videoWidget = new QWidget(this);
+    videoWidget = new QWebView(this);
+//    videoWidget->setFixedWidth(720);
+//    videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     toolWidget = new QWidget(this);
     toolWidget->setFixedSize(720, 60);
     
     infoWidget = new QWidget(this);
-    taglistWidget = new QTableWidget(0, 2, this);
-    tabWidget = new QTabWidget(this);
+    listWidget = new List(this);
+    listWidget->setFixedWidth(280);
+    listWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     menuWidget = new QWidget(this);
     
     //widgets left
@@ -128,8 +118,8 @@ void Window::UI() {
     mute->setIcon(QIcon(":/16x16/volume-medium.png"));
     mute->setIconSize(QSize(16, 16));
     mute->setStyleSheet ("QToolButton {border:0;}");
-//    mute->setCheckable(true);
-//    mute->setChecked(false);
+    mute->setCheckable(true);
+    mute->setChecked(true);
     isMuted = false;
     volume = new QSlider(Qt::Horizontal, this);
     title = new QLabel(tr("media-player"));
@@ -144,14 +134,14 @@ void Window::UI() {
     pLayout->addWidget(process, 9);
     pLayout->addSpacing(3);
     pLayout->addWidget(time, 0);
+    pLayout->addSpacing(10);
+    pLayout->addWidget(lib, 0);
     vLayout->addSpacing(23);
     vLayout->addWidget(mute, 0);
     vLayout->addWidget(volume, 1);
     vLayout->addSpacing(10);
     vLayout->addWidget(title, 6, Qt::AlignVCenter | Qt::AlignHCenter);
     vLayout->addSpacing(10);
-    vLayout->addWidget(lib, 0);
-    vLayout->addSpacing(3);
     gLayout->addLayout(pLayout, 1, 2, 1, 10, Qt::AlignHCenter | Qt::AlignVCenter);
     gLayout->addLayout(vLayout, 2, 2, 1, 10, Qt::AlignHCenter | Qt::AlignVCenter);
     
@@ -163,36 +153,10 @@ void Window::UI() {
     //right widgets
     vRLayout->addWidget(infoWidget);
     infoWidget->setFixedHeight(80);
-    vRLayout->addWidget(tabWidget);
-    tabWidget->addTab(taglistWidget, tr("默认列表"));
+    vRLayout->addWidget(listWidget);
+    //tabWidget->addTab(listWidget, tr("默认列表"));
     vRLayout->addWidget(menuWidget);
     menuWidget->setFixedHeight(45);
-    
-    
-    taglistWidget->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
-    taglistWidget->resizeRowsToContents();
-    taglistWidget->setContentsMargins(0,0,0,0);
-    taglistWidget->setColumnWidth(0, 180);
-    taglistWidget->setColumnWidth(1,65);
-//    taglistWidget->setColumnWidth(2,85);
-//    taglistWidget->setColumnWidth(3,60);
-//    taglistWidget->setColumnHidden(4,true);
-    taglistWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-    taglistWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-    taglistWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    taglistWidget->setShowGrid(false);
-    taglistWidget->setAlternatingRowColors(true);
-    taglistWidget->setAutoScroll(true);
-    taglistWidget->setAutoScrollMargin(0);
-    taglistWidget->setWordWrap(false);
-//    setHorizontalScrollBar(Qt::ScrollBarAlwaysOff);
-//    horizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    taglistWidget->horizontalHeader()->setVisible(false);
-    taglistWidget->verticalHeader()->setVisible(false);
-    taglistWidget->verticalScrollBar()->setStyleSheet("QScrollBar:vertical {border:0px solid grey;width:4px;background:#888888;}");
-    taglistWidget->setStyleSheet("QTableView:Item{selection-background-color: #DADADA}");
-   // tabWidget->setStyleSheet("QTabWidget {border:1px;}");
-    //taglistWidget->setStyleSheet("QTableWidget {border:0;}");
 }
 
 void Window::connection() {
@@ -253,7 +217,6 @@ void Window::connection() {
             break;
         }
     });
-    //connect(tab, &QTabWidget::currentChanged)
 }
 
 void Window::setPorcessPosition(qint64 val) {
@@ -276,34 +239,13 @@ void Window::metaData(QUrl url) {
             QFileInfo fileInfo(path);
             //here update the picture
             TagLib::MPEG::File file(fileInfo.absoluteFilePath().toUtf8());
-            //QPixmap pix;
             if(file.isValid()) {
                 this->title->setText(file.tag()->title().isNull() ? tr("%1").arg(fileInfo.baseName()) : tr(file.tag()->title().toCString(true)));
-                //get attached picture
-//                ID3v2::FrameList pictures = file.ID3v2Tag()->frameListMap()["APIC"];
-//                if(!pictures.isEmpty()) {
-//                    TagLib::ID3v2::AttachedPictureFrame *tmp = static_cast<TagLib::ID3v2::AttachedPictureFrame *>(pictures.front());
-//                    size_t size = tmp->picture().size();
-//                    pix.loadFromData((const unsigned char *)tmp->picture().data(),size,"JPEG");
-//                    pix = pix.scaled(96,96,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-//                    picture->setPixmap(pix);
-//                }
-//                else {
-//                    pix.load(":/default.png","PNG");
-//                    pix = pix.scaled(96,96,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-//                    picture->setPixmap(pix);
-//                }
             }
             else {
                 title->setText (tr("%1").arg (fileInfo.baseName()));
-//                pix.load(":/default.png","PNG");
-//                pix = pix.scaled(96,96,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-//                picture->setPixmap(pix);
             }
         }
-//        else {
-//            /*do nothing*/
-//        }
 }
 
 void Window::closeEvent(QCloseEvent *event) {

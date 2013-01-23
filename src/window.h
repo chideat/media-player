@@ -1,12 +1,14 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-
 #include <QWidget>
 #include <QToolButton>
 #include <QSlider>
 #include <QtMultimediaWidgets/QtMultimediaWidgets>
+#include <QtWebKit/QWebView>
 #include "player.h"
+#include "list.h"
+
 
 class Window : public QWidget {
     Q_OBJECT
@@ -19,8 +21,9 @@ private:
     QMediaPlayer *player;
     QMediaPlaylist *playlist;
     
-    QWidget *videoWidget, *toolWidget, *menuWidget, *infoWidget;
-    QTableWidget *taglistWidget;
+    QWidget *toolWidget, *menuWidget, *infoWidget;
+    QWebView *videoWidget;
+    List *listWidget;
     QTabWidget *tabWidget; 
     //QVideoWidget *videoWidget;
     
