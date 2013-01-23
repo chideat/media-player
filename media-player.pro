@@ -15,14 +15,12 @@ SOURCES += \
     src/main.cpp \
     src/player.cpp \
     src/load.cpp \
-    src/playlist.cpp \
     src/window.cpp \
     src/list.cpp
 
 HEADERS += \ 
     src/player.h \
     src/load.h \
-    src/playlist.h \
     src/window.h \
     src/list.h
 

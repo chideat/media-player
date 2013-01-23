@@ -1,7 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-
+#include "list.h"
 #include <QWidget>
 #include <QToolButton>
 #include <QSlider>
@@ -20,7 +20,7 @@ private:
     QMediaPlaylist *playlist;
     
     QWidget *videoWidget, *toolWidget, *menuWidget, *infoWidget;
-    QTableWidget *taglistWidget;
+    List *taglistWidget;
     QTabWidget *tabWidget; 
     //QVideoWidget *videoWidget;
     

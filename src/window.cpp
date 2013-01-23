@@ -80,7 +80,7 @@ void Window::UI() {
     toolWidget->setFixedSize(720, 60);
     
     infoWidget = new QWidget(this);
-    taglistWidget = new QTableWidget(0, 2, this);
+    taglistWidget = new List(this);
     tabWidget = new QTabWidget(this);
     menuWidget = new QWidget(this);
     
@@ -159,7 +159,6 @@ void Window::UI() {
     process->setAcceptDrops(true);
     volume->setAcceptDrops(true);
     
-    
     //right widgets
     vRLayout->addWidget(infoWidget);
     infoWidget->setFixedHeight(80);
@@ -168,31 +167,6 @@ void Window::UI() {
     vRLayout->addWidget(menuWidget);
     menuWidget->setFixedHeight(45);
     
-    
-    taglistWidget->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
-    taglistWidget->resizeRowsToContents();
-    taglistWidget->setContentsMargins(0,0,0,0);
-    taglistWidget->setColumnWidth(0, 180);
-    taglistWidget->setColumnWidth(1,65);
-//    taglistWidget->setColumnWidth(2,85);
-//    taglistWidget->setColumnWidth(3,60);
-//    taglistWidget->setColumnHidden(4,true);
-    taglistWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-    taglistWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-    taglistWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    taglistWidget->setShowGrid(false);
-    taglistWidget->setAlternatingRowColors(true);
-    taglistWidget->setAutoScroll(true);
-    taglistWidget->setAutoScrollMargin(0);
-    taglistWidget->setWordWrap(false);
-//    setHorizontalScrollBar(Qt::ScrollBarAlwaysOff);
-//    horizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    taglistWidget->horizontalHeader()->setVisible(false);
-    taglistWidget->verticalHeader()->setVisible(false);
-    taglistWidget->verticalScrollBar()->setStyleSheet("QScrollBar:vertical {border:0px solid grey;width:4px;background:#888888;}");
-    taglistWidget->setStyleSheet("QTableView:Item{selection-background-color: #DADADA}");
-   // tabWidget->setStyleSheet("QTabWidget {border:1px;}");
-    //taglistWidget->setStyleSheet("QTableWidget {border:0;}");
 }
 
 void Window::connection() {
