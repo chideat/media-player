@@ -10,31 +10,33 @@
 #include <attachedpictureframe.h>
 #include <apetag.h>
 
-Window::Window(Player *player, QWidget *parent):QWidget(parent) {
-    this->player = player->getPlayer();
-    this->playlist = player->getPlaylist();
-    
+Window::Window(QWidget *parent):QWidget(parent) {
+    //init window styles 
     setWindowTitle(tr("media-player"));
     UI();
+    setPlayer();
     
-    volume->setRange(0, 50);
     connection();
 }
 
-/**
- * @brief Window::init
- * @return 
- * load the necessary config from the config file
- * as 
- * themes
- * playlist
- */
 bool Window::initWindow() {
     
     return true;
 }
 
+void Window::setPlayer() {
+    _player = new Player();
+    player = _player->getPlayer();
+    playlist = _player->getPlaylist();
+}
+
+Player *Window::getPlayer() {
+    return _player;
+}
+
 bool Window::initPlaylist(int argc, char **argv) {
+    if(getPlayer() == NULL)
+        return false;
     for(int i = 0; i < argc; i ++) {
         QFileInfo fileInfo(argv[i]);
         TagLib::FileRef file(fileInfo.absoluteFilePath().toUtf8());
@@ -60,6 +62,7 @@ bool Window::initPlaylist(int argc, char **argv) {
         // autoplay
         player->play();
     }
+    //player->setVolume(5);
     return true;
 }
 
@@ -166,7 +169,6 @@ void Window::UI() {
     tabWidget->addTab(taglistWidget, tr("默认列表"));
     vRLayout->addWidget(menuWidget);
     menuWidget->setFixedHeight(45);
-    
 }
 
 void Window::connection() {
@@ -179,7 +181,7 @@ void Window::connection() {
     connect(previous, &QToolButton::pressed, playlist, &QMediaPlaylist::previous);
     connect(next, &QToolButton::pressed, playlist, &QMediaPlaylist::next);
     connect(volume, &QSlider::sliderMoved, player, &QMediaPlayer::setVolume);
-    connect(volume, &QSlider::sliderMoved, [=](int val){
+    connect(player, &QMediaPlayer::volumeChanged, [=](int val){
         if(val >= 40)
             mute->setIcon(QIcon(":/16x16/volume-high.png"));
         else if(val >= 20)

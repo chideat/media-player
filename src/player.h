@@ -13,7 +13,7 @@ public :
     QMediaPlayer *player ;
     QMediaPlaylist *playlist;
     
-    void initPlayer(int volume = 5);
+    void initPlayer(int volume = 0);
     QMediaPlayer *getPlayer();
     QMediaPlaylist *getPlaylist();
 };

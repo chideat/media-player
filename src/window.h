@@ -11,14 +11,14 @@
 class Window : public QWidget {
     Q_OBJECT
 public: 
-    Window(Player *player, QWidget *parent = NULL);
+    Window(QWidget *parent = NULL);
     bool initWindow();
     bool initPlaylist(int argc, char **argv);
-
+    Player *getPlayer();
 private:
+    Player *_player;
     QMediaPlayer *player;
     QMediaPlaylist *playlist;
-    
     QWidget *videoWidget, *toolWidget, *menuWidget, *infoWidget;
     List *taglistWidget;
     QTabWidget *tabWidget; 
@@ -41,6 +41,7 @@ private:
     QToolButton *lib;
     
     void connection();
+    void setPlayer();
     void UI();
 public slots:
     void setPorcessPosition(qint64 val);
