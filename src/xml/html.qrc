@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>list.html</file>
+        <file>jquery.js</file>
+        <file>main.css</file>
     </qresource>
 </RCC>

@@ -21,10 +21,11 @@ List::List(QWidget *parent) : QWidget(parent) {
     connect(frame, &QWebFrame::javaScriptWindowObjectCleared, [=](){
         frame->addToJavaScriptWindowObject(QString("List"), this);
     });
-    QFile file(":/list.html");
-    file.open(QIODevice::ReadOnly);
-    view->setHtml(file.readAll());
-    file.close();
+//    QFile file(":/list.html");
+//    file.open(QIODevice::ReadOnly);
+//    view->setHtml(file.readAll());
+//    file.close();
+    view->load(QUrl("qrc:/list.html"));
 }
 
 bool List::addItem(char *argv, int playList) {
