@@ -16,17 +16,14 @@ SOURCES += \
     src/main.cpp \
     src/player.cpp \
     src/load.cpp \
-    src/window.cpp \
-    src/list.cpp
+    src/window.cpp
 
 HEADERS += \ 
     src/player.h \
     src/load.h \
-    src/window.h \
-    src/list.h \
-    src/menu.h
+    src/window.h
 
-RESOURCES += src/img/icons.qrc \
+RESOURCES += \
     src/xml/html.qrc
 
 OTHER_FILES += \

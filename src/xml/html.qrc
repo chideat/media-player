@@ -1,7 +1,31 @@
 <RCC>
     <qresource prefix="/">
-        <file>list.html</file>
-        <file>jquery.js</file>
-        <file>main.css</file>
+        <file>index.html</file>
+        <file>css/main.css</file>
+        <file>js/jquery.min.js</file>
+        <file>img/add.png</file>
+        <file>img/del.png</file>
+        <file>img/handle.png</file>
+        <file>img/library.png</file>
+        <file>img/lMusic.png</file>
+        <file>img/media-skip-backward.png</file>
+        <file>img/media-skip-forward.png</file>
+        <file>img/min.png</file>
+        <file>img/next.png</file>
+        <file>img/pause.png</file>
+        <file>img/play.png</file>
+        <file>img/previous.png</file>
+        <file>img/random.png</file>
+        <file>img/repeat.png</file>
+        <file>img/shuffle.png</file>
+        <file>img/shutdown.png</file>
+        <file>img/signal.png</file>
+        <file>img/stop.png</file>
+        <file>img/volume-high.png</file>
+        <file>img/volume-low.png</file>
+        <file>img/volume-medium.png</file>
+        <file>img/volume-muted.png</file>
+        <file>img/volume-zero.png</file>
+        <file>img/yahoo.png</file>
     </qresource>
 </RCC>

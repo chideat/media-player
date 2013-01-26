@@ -1,0 +1,179 @@
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: #BFBFBF;
+}
+
+ul {
+    list-style: none outside none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    display: block;
+    float: right;
+}
+
+/*************************************************/
+/* head */
+#head {
+    width: 100%;
+    height: 50px;
+}
+
+#song-info {
+    text-align: center;
+    padding-top: 16px;
+}
+
+/*************************************************/
+/* main */
+#main {
+    width: 100%;
+}
+
+#leftCol {
+	float: left;
+    width: 10%;
+    text-align: center;
+    background-color: #898989;
+}
+
+#leftCol div {
+	margin-top: 10px;
+   width: 100%;
+}
+
+#centerCol {
+    float: left;
+    width: 60%;
+    padding-left: 3%;
+    padding-right: 3%;
+    text-align: center;
+}
+
+#rightCol {
+    float: left;
+    width: 20%;
+}
+
+.mediaRow {
+	height: 23px;
+	padding-top: 5px;
+    background-color: #DFDFDF;
+}
+
+.c0 {
+    float: left;
+    width: 47%;
+}
+
+.c1 {
+    float: left;
+	width: 47%;
+}
+
+.odd {
+}
+
+.even {
+    
+}
+
+/*************************************************/
+/* foot */
+#foot {
+    position: absolute;
+    bottom: 0px;
+    height: 80px;
+}
+
+/*process bar    */
+#process {
+    float: left;
+    clear: both;
+    width: 99%;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #888888;
+    border-top: none;
+    border-radius:3px;
+    height: 6px;
+}
+
+#process .bar {
+    display: block;
+    position: relative;
+    background: #0055AA;
+    //color: #000088;
+    height: 100%;
+}
+
+#action {
+    float: left;
+    z-index: 3;
+}
+
+#action ul {
+    margin: 24px;
+}
+
+#action ul li {
+    display: block;
+    float: left;
+}
+
+#action img, #playmode img {
+    margin: 0 12px 0 12px;
+}
+
+#playmode {
+    float: right;
+    margin-top: 24px;
+}
+
+#volume {
+    float: right;
+	margin: 24px 3% 0 24px;
+}
+
+#volume-mute {
+	float: left;
+}
+
+#volume-slider {
+    float: left;
+    width: 100px;
+    margin-top: 9px;
+    border: 1px solid #888888;
+    border-radius:2px;
+    height: 4px;
+}
+
+#volume-slider .bar {
+    display: block;
+    position: relative;
+    background: #0055AA;
+    color: #000088;
+    height: 100%;
+}
+
+.panel {
+    width: 100%;
+    background: #AFAFAF;
+}
+
+/**********************************************************/
+/* additional settings */
+body {
+    //overflow-x: hidden;
+    //overflow-y: hidden;
+    -webkit-user-select: none;
+}
+
+#song-info {
+    -webkit-user-select: text;
+}

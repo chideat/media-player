@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <link type="text/css" rel="stylesheet" href="css/main.css" />
+    </head>
+    <body>
+        <div id="head" class="panel">
+            <div id="logo"></div>
+            <div id="song-info">
+                <span id="title">歌曲名</span>
+                <span class="split">-</span>
+                <span id="artist">歌手名</span>
+            </div>
+        </div>
+        <div id="main" class="panel">
+            <!-- list -->
+            <div id="leftCol" >
+                <div>默认列表</div>
+                <div>我的最爱</div>
+            </div>
+            <!-- center -->
+            <div id="centerCol">
+                <div id="tab"></div>
+                <div id="contentList">
+                     <div id="tableHead"></div>
+                     <div id="mediaList">
+                         <div class="odd mediaRow"  id="1">
+                             <div class="c0">任逍遥</div><div class="c1">任贤齐</div>
+                         </div>
+                     </div>
+                </div>
+            </div>
+            <div id="rightCol">
+                <div><img src="img/yahoo.png" alt="yahoo" ></div>
+            </div>            
+            </div>
+        </div>
+        <div id="foot" class="panel">
+            <div id="process">
+                <strong class="bar" style="width:40%;" id="processing"></strong>
+            </div>
+            <div id="action">
+                <ul class="play-btn">
+                    <li id="previous" class="buttons_1"><a href="#"><img src="img/previous.png" ></img></a></li>
+                    <li id="playPause" class="buttons_1"><a href="#"><img src="img/play.png" ></img></a></li>
+                    <li id="next" class="buttons_1"><a href="#"><img src="img/next.png" ></img></a></li>
+                </ul>
+            </div>
+            <div id="volume">
+                <a id="volume-mute" href="#"><img src="img/volume-low.png"></img></a>
+                <div id="volume-slider"  ><strong class="bar" style="width:40%;" id="voluming"></strong></div>
+            </div>
+            <ul id="playmode">
+                <li id="random-mode" class="buttons_2"><a href="#"><img src="img/random.png"></img></a></li>
+                <li id="signal-mode" class="buttons_2"><a href="#"><img src="img/signal.png"></img></a></li>
+                <li id="repeat-mode" class="buttons_2"><a href="#"><img src="img/repeat.png"></img></a></li>
+            </ul>
+        </div>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+    </body>
+</html>
