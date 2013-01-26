@@ -27,5 +27,6 @@
         <file>img/volume-muted.png</file>
         <file>img/volume-zero.png</file>
         <file>img/yahoo.png</file>
+        <file>js/functions.js</file>
     </qresource>
 </RCC>

@@ -1,6 +1,9 @@
 #include "window.h"
 #include <QWebElement>
+#include <QDebug>
+#include <QFileDialog>
 
+typedef Window Operator;
 Window::Window(QWebView *parent):QWebView(parent) {
     setWindowTitle(tr("media-player"));
 
@@ -15,42 +18,46 @@ Window::Window(QWebView *parent):QWebView(parent) {
     load(QUrl("qrc:/index.html"));
 }
 
-//bool Window::setMetaData(int *meta, QWebElement element) {
+bool Window::setMetaData(QString &meta, QWebElement element) {
     
-//}
+}
 
-//bool Window::setPic(QPixmap *pixmap) {
+bool Window::setPic(QPixmap *pixmap) {
     
-//}
+}
 
-//bool Window::setLyric(QString &lyric) {
+bool Window::setLyric(QString &lyric) {
     
-//}
+}
 
-//void Window::addMedia() {
-    
-//}
+void Window::addMedia() {
+    QFileDialog::s
+}
 
-//void Window::addMedias() {
+void Window::addMedias() {
     
-//}
+}
 
-//void Window::rmMedia(int id) {
+void Window::rmMedia(int id) {
     
-//}
+}
 
-//void Window::clean() {
+void Window::clean() {
     
-//}
+}
 
-//void Window::playOpause(int flag) {
+void Window::playOpause(int flag) {
     
-//}
+}
 
-//void Window::previous() {
+void Window::previous() {
     
-//}
+}
 
-//void Window::next() {
+void Window::next() {
     
-//}
+}
+
+void Window::setMode(int mode) {
+    
+}

@@ -2,9 +2,9 @@
 #define LOAD_H
 
 #include <QThread>
+#include <QWebElement>
+#include <QStringList>
 
-class QWebElement;
-class QStringList;
 /**
  * @brief The load class
  * this class used to load medias from local or network
@@ -17,9 +17,13 @@ class Load:  QThread{
     Q_OBJECT
 public:
     Load(QThread *parent = NULL);
-    bool load(QStringList &media, QWebElement element);
+    void setElement(QWebElement element);
+    void setMedias(QStringList &medias);
 protected:
     void run();
+    
+    QWebElement element;
+    QStringList *medias;
 };
 
 #endif // LOAD_H

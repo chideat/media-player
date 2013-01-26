@@ -5,7 +5,7 @@
 #include <QWebView>
 #include <QWebFrame>
 #include <QWebElement>
-#include <QPixmap>
+#include <QHash>
 
 class Window : public QWebView {
     Q_OBJECT
@@ -13,18 +13,18 @@ public:
     Window(QWebView *parent = NULL);
     
 public slots:
-//    bool setMetaData(int *meta, QWebElement element);
-//    bool setPic(QPixmap *pixmap);
-//    bool setLyric(QString &lyric);
+    bool setMetaData(QString &meta, QWebElement element);
+    bool setPic(QPixmap *pixmap);
+    bool setLyric(QString &lyric);
     
-//    //call by javascript
-//    void addMedia();
-//    void addMedias();
-//    void setMode(int mode);
-//    void rmMedia(int id);
-//    void clean();
-//    void playOpause(int flag);
-//    void previous();
-//    void next();
+    //call by javascript
+    void addMedia();
+    void addMedias();
+    void rmMedia(int id);
+    void clean();
+    void playOpause(int flag);
+    void previous();
+    void next();
+    void setMode(int mode);
 };
 #endif // WINDOW_H
