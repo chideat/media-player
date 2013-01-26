@@ -7,8 +7,6 @@
 class Player {
 public : 
     Player();
-//    Player(QString path, QObject *parent = NULL);
-//    Player(QStringList paths, QObject *parent = NULL);
     
     QMediaPlayer *player ;
     QMediaPlaylist *playlist;
@@ -16,6 +14,7 @@ public :
     void initPlayer(int volume = 5);
     QMediaPlayer *getPlayer();
     QMediaPlaylist *getPlaylist();
+    void play(int index);
 };
 
 

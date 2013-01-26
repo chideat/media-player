@@ -49,34 +49,40 @@ ul li {
 
 #centerCol {
     float: left;
-    width: 60%;
+    width: 65%;
     padding-left: 3%;
     padding-right: 3%;
     text-align: center;
 }
 
 #rightCol {
-    float: left;
-    width: 20%;
+    float: right;
+    width: 15%;
 }
 
 .mediaRow {
 	height: 23px;
 	padding-top: 5px;
-    background-color: #DFDFDF;
+}
+
+.mediaRow div {
+    white-space: nowrap;
+    overflow : hidden ;
 }
 
 .c0 {
     float: left;
-    width: 47%;
+    text-align:left;
+    width: 70%;
 }
 
 .c1 {
     float: left;
-	width: 47%;
+	width: 30%;
 }
 
 .odd {
+    background-color: #DFDFDF;
 }
 
 .even {

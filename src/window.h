@@ -1,11 +1,10 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <QWidget>
 #include <QWebView>
-#include <QWebFrame>
 #include <QWebElement>
-#include <QHash>
+#include "player.h"
+
 
 class Window : public QWebView {
     Q_OBJECT
@@ -18,7 +17,7 @@ public slots:
     bool setLyric(QString &lyric);
     
     //call by javascript
-    void addMedia();
+    void addMedia(int count);
     void addMedias();
     void rmMedia(int id);
     void clean();
@@ -26,5 +25,12 @@ public slots:
     void previous();
     void next();
     void setMode(int mode);
+    
+    void run(QString label, QStringList medias, int c);
+private:
+    QWebElement getElement(QString label);
+    Player *player;
+signals:
+    void started(QString label, QStringList medias, int c);
 };
 #endif // WINDOW_H

@@ -7,13 +7,8 @@
 Player::Player() {
     player = new QMediaPlayer(NULL);
     playlist = new QMediaPlaylist(NULL);
-    //player->setPlaylist(playlist);
-    initPlayer();
-}
-
-/* give up load the play history */
-void Player::initPlayer(int volume) {
-    player->setVolume(volume);
+    player->setPlaylist(playlist);
+    player->setVolume(5);
 }
 
 QMediaPlayer* Player::getPlayer()  {
@@ -28,3 +23,21 @@ QMediaPlaylist *Player::getPlaylist() {
     return playlist;
 }
 
+void Player::play(int index) {
+    if(index < 0 && !player->playlist()->isEmpty()) 
+        switch(player->state()) {
+        case QMediaPlayer::StoppedState :
+        case QMediaPlayer::PausedState:
+            player->play();
+        case QMediaPlayer::PlayingState:
+            player->play();
+        }
+    else if(index >= 0) {
+        playlist->setCurrentIndex(index);
+        player->play();
+    }
+        
+
+        
+    //else if(index >= 0 && player->playlist()->)
+}
