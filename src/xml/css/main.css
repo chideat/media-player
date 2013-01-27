@@ -81,6 +81,11 @@ ul li {
 	width: 30%;
 }
 
+.c2 {
+    float:right;
+    display: none;
+}
+
 .odd {
     background-color: #DFDFDF;
 }

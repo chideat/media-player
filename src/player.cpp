@@ -8,7 +8,6 @@ Player::Player() {
     player = new QMediaPlayer(NULL);
     playlist = new QMediaPlaylist(NULL);
     player->setPlaylist(playlist);
-    player->setVolume(5);
 }
 
 QMediaPlayer* Player::getPlayer()  {

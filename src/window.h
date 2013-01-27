@@ -25,7 +25,10 @@ public slots:
     void previous();
     void next();
     void setMode(int mode);
-    
+    void setPosition(int x, int width);
+    void setVolume(int x, int width);
+    void setVolume(double per);
+    void setMuted(int mute);
     void run(QString label, QStringList medias, int c);
 private:
     QWebElement getElement(QString label);
