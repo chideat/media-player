@@ -14,6 +14,7 @@ typedef Window Operator;
 
 Window::Window(QWebView *parent):QWebView(parent) {
     setWindowTitle(tr("media-player"));
+    this->setContextMenuPolicy(Qt::NoContextMenu);
     //webkit attribute set
     player = new Player;
     
@@ -27,7 +28,8 @@ Window::Window(QWebView *parent):QWebView(parent) {
         page()->mainFrame()->evaluateJavaScript(tr("updateMetaData(%1)").arg(index));
     });
     connect(player->getPlayer(), &QMediaPlayer::positionChanged, [=](qint64 position){
-        page()->mainFrame()->evaluateJavaScript(tr("updatePosition(%1)").arg(100.0 * position / player->getPlayer()->duration()));
+        if(player->getPlayer()->duration() >= 0)
+            page()->mainFrame()->evaluateJavaScript(tr("updatePosition(%1)").arg(100.0 * position / player->getPlayer()->duration()));
     });
     
     //load html

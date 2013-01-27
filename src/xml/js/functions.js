@@ -1,5 +1,3 @@
-var current = 0;
-
 function getMediaCount() {
     return $("#mediaList > div").size();
 }
@@ -79,7 +77,7 @@ $(document).ready(function(){
         }
     });
     
-    Operator.setVolume(0.3);
+    Operator.setVolume(0.2);
     $("#volume-mute").find("img").attr("src", "qrc:/img/volume-low.png");
-    $("#voluming").animate({width: "30%"}, 300).show();
+    $("#voluming").animate({width: "20%"}, 300).show();
 });

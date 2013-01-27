@@ -37,32 +37,33 @@ ul li {
 
 #leftCol {
 	float: left;
-    width: 10%;
+    width: 12%;
     text-align: center;
-    background-color: #898989;
 }
 
 #leftCol div {
-	margin-top: 10px;
-   width: 100%;
+    width: 100%;
+    border-radius: 1em;
+    padding: 10px;
+    background:#DEDEDE;
 }
 
 #centerCol {
     float: left;
-    width: 65%;
-    padding-left: 3%;
-    padding-right: 3%;
+    width: 85%;
+    height: 70%;
+    margin-left: 3%;
     text-align: center;
+    z-index: 10;
 }
 
 #rightCol {
-    float: right;
-    width: 15%;
 }
 
 .mediaRow {
 	height: 23px;
-	padding-top: 5px;
+	padding: 5px 1em 3px 1em;
+    border-radius: 1em;
 }
 
 .mediaRow div {
@@ -73,11 +74,12 @@ ul li {
 .c0 {
     float: left;
     text-align:left;
-    width: 70%;
+    width: 68%;
 }
 
 .c1 {
     float: left;
+    text-align:left;
 	width: 30%;
 }
 
@@ -180,8 +182,8 @@ ul li {
 /**********************************************************/
 /* additional settings */
 body {
-    //overflow-x: hidden;
-    //overflow-y: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
     -webkit-user-select: none;
 }
 
