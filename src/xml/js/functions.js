@@ -3,16 +3,62 @@ function getMediaCount() {
 }
 
 function updateMetaData(index) {
-    current = index;
     $("#title").text($("#" + index).find(".c0").text() + " - " + $("#" + index).find(".c1").text());
+    $("#mediaList").attr("current", index);
+    $("#process").attr("duration", $("#" + index).find(".c2").attr("duration"))
+    .find("#processing").attr("step", 
+                              ($("#process").width() * $("#process").find("#processing").attr("interval")) 
+                              / ($("#process").attr("duration") * 1000)).animate({width: 0}, 400);
+
+
+    
+//    // update attached picture
+//    alert("here1" + Operator.pixmap);
+//    Operator.pixmap.assignToHTMLImageElement(document.getElementById("attPicImg"));
+//    alert("here2");
+////    var context = document.getElementById("attPicCan").getContext("2d");
+////    context.putImageData(myObject.myPixMap.toImageData());
+//    alert("here");
 }
 
-function updatePosition(position) {
-    //$("#processing").css({width: position + "%"});
-    $("#processing").animate({width: position + 0.3 +   "%"}, 500);
+function updatePosition() {
+    if($("#playPause").hasClass("playing")) {
+        $("#processing").css("width", $("#processing").width() + parseFloat($("#processing").attr("step")));
+    }
+    else {
+        $("#processing").attr("width", 0);
+    }
+}
+
+function mutedChanged(muted) {
+    switch(muted) {
+    case false:
+        $("#volume-mute").find("img").attr("src", $("#volume-mute").find("img").attr("osrc"));
+        $("#voluming").show();
+        break;
+    case true:
+        $("#volume-mute").find("img").attr("osrc",  $("#volume-mute").find("img").attr("src")).attr("src", "qrc:/img/volume-muted.png");
+        $("#voluming").hide();
+        break;
+    }
+}
+
+function stateChanged(state) {
+    switch(state) {
+    case 1:
+        $("#playPause").addClass("playing");
+        break;
+    default:
+        $("#playPause").removeClass("playing");
+    }
 }
 
 $(document).ready(function(){
+    /* connections */
+    Player.mutedChanged.connect(mutedChanged);
+    Operator.stateChanged.connect(stateChanged);
+    Operator.updateMetaData.connect(updateMetaData);
+    
     /* call Windows */
     $("#addMedia").click(function(){
         Operator.addMedia(getMediaCount());
@@ -33,9 +79,7 @@ $(document).ready(function(){
     $("#mediaList").bind('dblclick', function(event) {
        if($(event.target).parent().is(".mediaRow")) {
            var $target = $(event.target).parent();
-           current = $target.attr("id");
            Operator.playOpause($target.attr("id"));
-           $("#title").text($target.find(".c0").text() + " - " + $target.find(".c1").text());
        }
     });
     
@@ -44,7 +88,10 @@ $(document).ready(function(){
     });
     
     $("#process").click(function(event){
-        Operator.setPosition(event.offsetX, $(this).width());
+         if(parseInt($("#mediaList").attr("current")) >= 0) {
+             Operator.setPosition(event.offsetX, $(this).width());
+              $("#processing").css("width", event.offsetX);
+         }
     });
     
     $("#volume-slider").click(function(event){
@@ -64,20 +111,14 @@ $(document).ready(function(){
     });
     
     $("#volume-mute").click(function(){
-        if($("#voluming").css('display') === 'none') {
-            $("#voluming").show();
-            Operator.setMuted(0);
-            $(this).find("img").attr("src", $(this).find("img").attr("osrc"));
-        }
-        else {
-            $(this).find("img").attr("osrc",  $(this).find("img").attr("src")).attr("src", "qrc:/img/volume-muted.png");
-            Operator.setMuted(1);
-            $("#voluming").hide();
-            
-        }
+            Operator.setMuted();
     });
     
+    //init
     Operator.setVolume(0.2);
     $("#volume-mute").find("img").attr("src", "qrc:/img/volume-low.png");
     $("#voluming").animate({width: "20%"}, 300).show();
+    // call timer 
+    window.setInterval(updatePosition, $("#processing").attr('interval'));
+    
 });

@@ -4,7 +4,7 @@
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 
-#define MAX_VOLUME 50
+#define MAX_VOLUME 40
 
 class Player {
 public : 

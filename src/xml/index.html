@@ -15,25 +15,28 @@
             <!-- list -->
             <div id="leftCol">
                 <div>默认列表</div>
+                <div id="attPic">
+                    <div>
+                        <img alt="yahoo" id="attPicImg" width="96" height="96" />
+                        <canvas id="attPicCan" width="96" height="96" />
+                    </div>
+                </div>            
             </div>
             <!-- center -->
             <div id="centerCol">
                 <div id="tab"></div>
                 <div id="contentList">
                      <div id="tableHead"></div>
-                     <div id="mediaList">
+                     <div id="mediaList" current="-1">
                          <!-- div class="odd mediaRow"  id="1"><div class="c0">任逍遥</div><div class="c1">任贤齐</div></div -->
                      </div>
                 </div>
             </div>
-            <div id="rightCol" style="display:none">
-                <div><img src="qrc:/img/yahoo.png" alt="yahoo" ></div>
-            </div>            
             </div>
         </div>
         <div id="foot" class="panel">
             <div id="process">
-                <strong class="bar" style="width:0%;" id="processing"></strong>
+                <strong class="bar" style="width:0px;" id="processing" interval="1000"></strong>
             </div>
             <div id="action">
                 <ul class="play-btn">

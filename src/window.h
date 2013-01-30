@@ -10,10 +10,12 @@ class Window : public QWebView {
     Q_OBJECT
 public: 
     Window(QWebView *parent = NULL);
-    
+    Q_PROPERTY(QPixmap pixmap READ getPic WRITE setPic)
+    QPixmap getPic() const;
+    void setPic(QPixmap pix);
 public slots:
     bool setMetaData(QString &meta, QWebElement element);
-    bool setPic(QPixmap *pixmap);
+//    bool setPic(QPixmap *pixmap);
     bool setLyric(QString &lyric);
     
     //call by javascript
@@ -28,12 +30,16 @@ public slots:
     void setPosition(int x, int width);
     void setVolume(int x, int width);
     void setVolume(double per);
-    void setMuted(int mute);
+    void setMuted();
     void run(QString label, QStringList medias, int c);
 private:
     QWebElement getElement(QString label);
     Player *player;
+    qint64 position;
+    QPixmap pixmap;
 signals:
     void started(QString label, QStringList medias, int c);
+    void updateMetaData(int index);
+    void stateChanged(int state);
 };
 #endif // WINDOW_H

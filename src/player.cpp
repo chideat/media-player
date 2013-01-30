@@ -23,20 +23,22 @@ QMediaPlaylist *Player::getPlaylist() {
 }
 
 void Player::play(int index) {
-    if(index < 0 && !player->playlist()->isEmpty()) 
+    if(index < 0 && !player->playlist()->isEmpty()) {
         switch(player->state()) {
         case QMediaPlayer::StoppedState :
         case QMediaPlayer::PausedState:
             player->play();
+            break;
         case QMediaPlayer::PlayingState:
-            player->play();
+            player->pause();
+            break;
         }
+    }
     else if(index >= 0) {
-        playlist->setCurrentIndex(index);
+        if(index != playlist->currentIndex()) 
+            playlist->setCurrentIndex(index);
+        else 
+            player->stop();
         player->play();
     }
-        
-
-        
-    //else if(index >= 0 && player->playlist()->)
 }
