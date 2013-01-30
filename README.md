@@ -17,8 +17,8 @@ going to do
 * show the attached picture in the medias
 * add remove function
 * and any other functions 
-* but all those are not very important
 
 problems
 --------------------
-* cost double cpu time of common players
+* failed to add the attached picture to webkit
+
