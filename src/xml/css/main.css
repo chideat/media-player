@@ -108,12 +108,10 @@ ul li {
 #process {
     float: left;
     clear: both;
-    width: 99%;
+    width: 100%;
     margin: 0;
     padding: 0;
-    border: 1px solid #888888;
-    border-top: none;
-    border-radius:3px;
+    border-bottom: 1px solid #888888;
     height: 6px;
 }
 
@@ -139,11 +137,35 @@ ul li {
     float: left;
 }
 
-#action img, #playmode img {
+#action img{
     margin: 0 12px 0 12px;
 }
 
+#playmode li {
+    margin: 3px;
+}
+
 #playmode {
+    float: right;
+    margin-top: 18px;
+    background: #9D9D9D;
+    border-radius: 1em;
+}
+
+.buttons_2 {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #9D9D9D;
+    background-color: #9D9D9D;
+    border-radius: 1em;
+}
+
+.actived {
+    border: 3px solid #8C8C8C;
+    background-color: #6A6A6A;
+}
+
+#addMedia {
     float: right;
     margin-top: 24px;
 }

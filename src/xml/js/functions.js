@@ -46,10 +46,10 @@ function mutedChanged(muted) {
 function stateChanged(state) {
     switch(state) {
     case 1:
-        $("#playPause").addClass("playing");
+        $("#playPause").addClass("playing").find('img').attr('src', 'qrc:/img/pause.png');
         break;
     default:
-        $("#playPause").removeClass("playing");
+        $("#playPause").removeClass("playing").find('img').attr('src', 'qrc:/img/play.png');;
     }
 }
 
@@ -85,6 +85,8 @@ $(document).ready(function(){
     
     $("#random-mode, #repeat-mode, #signal-mode").bind("click", function(){
         Operator.setMode($(this).attr("pri"));
+        $(".buttons_2").removeClass("actived");
+        $(this).addClass("actived");
     });
     
     $("#process").click(function(event){
@@ -113,6 +115,11 @@ $(document).ready(function(){
     $("#volume-mute").click(function(){
             Operator.setMuted();
     });
+    
+//    $(".buttons_2").click(function(){
+//        $(".buttons_2").removeClass("actived");
+//        $(this).addClass("actived");
+//    });
     
     //init
     Operator.setVolume(0.2);
