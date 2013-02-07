@@ -10,6 +10,7 @@ class Window : public QWebView {
     Q_OBJECT
 public: 
     Window(QWebView *parent = NULL);
+    ~Window();
     Q_PROPERTY(QPixmap pixmap READ getPic WRITE setPic)
     QPixmap getPic() const;
     void setPic(QPixmap pix);
@@ -32,6 +33,8 @@ public slots:
     void setVolume(double per);
     void setMuted();
     void run(QString label, QStringList medias, int c);
+protected:
+    void closeEvent(QCloseEvent *);
 private:
     QWebElement getElement(QString label);
     Player *player;

@@ -125,6 +125,7 @@ $(document).ready(function(){
     Operator.setVolume(0.2);
     $("#volume-mute").find("img").attr("src", "qrc:/img/volume-low.png");
     $("#voluming").animate({width: "20%"}, 300).show();
+
     // call timer 
     window.setInterval(updatePosition, $("#processing").attr('interval'));
     

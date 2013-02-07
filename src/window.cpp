@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QDesktopServices>
 
 #include <fileref.h>
 #include <mpegfile.h>
@@ -15,13 +16,21 @@
 #include <QFileInfo>
 #include <QDebug>
 #include <QTime>
+#include <QSettings>
+#include <QCloseEvent>
+#include <QtCore/QXmlStreamReader>
+#include <QtCore/QXmlStreamWriter>
+
+#define STORAGE "/home/thinking/.config/media/playlist.db"
 
 using namespace TagLib;
 
 //typedef Window Operator;
 
 Window::Window(QWebView *parent):QWebView(parent) {
+    hide();
     setWindowTitle(tr("media-player"));
+    setWindowIcon(QIcon(":/img/media.png"));
     this->setContextMenuPolicy(Qt::NoContextMenu);
     //webkit attribute set
     player = new Player;
@@ -61,8 +70,38 @@ Window::Window(QWebView *parent):QWebView(parent) {
             break;
         }
     });
-
+    connect(this, &Window::loadFinished, [=]() {
+        QFile file(STORAGE);
+        if(file.exists()) {
+            file.open(QIODevice::ReadOnly);
+            QXmlStreamReader stream(&file);
+            int index = player->getPlaylist()->mediaCount();
+            while(!stream.atEnd() && !stream.hasError()) {
+                QXmlStreamReader::TokenType token = stream.readNext();
+                if(token == QXmlStreamReader::StartDocument) 
+                    continue;
+                if(token == QXmlStreamReader::StartElement) {
+                    if(stream.name() == "medias") 
+                        continue;
+                    if(stream.name() == "media") {
+                        QXmlStreamAttributes attrs = stream.attributes();
+                        stream.readNext();
+                        if(stream.tokenType() == QXmlStreamReader::Characters) {
+                            run("#mediaList", QStringList(stream.text().toString().remove(0, 7)), index ++);
+                            if(attrs.hasAttribute("actived")) {
+                                player->getPlaylist()->setCurrentIndex(index - 1);
+                                player->getPlayer()->pause();
+                                player->getPlayer()->setPosition(attrs.value("duration").toString().toLongLong());
+                                player->play(-1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
     load(QUrl("qrc:/index.html"));
+    show();
 }
 
 bool Window::setMetaData(QString &meta, QWebElement element) {
@@ -70,7 +109,7 @@ bool Window::setMetaData(QString &meta, QWebElement element) {
 }
 
 //bool Window::setPic(QPixmap *pixmap) {
-    
+
 //}
 
 bool Window::setLyric(QString &lyric) {
@@ -180,3 +219,44 @@ void Window::setPic(QPixmap pix) {
 QPixmap Window::getPic() const {
     return pixmap;
 }
+
+void Window::closeEvent(QCloseEvent *event) {
+    //    QSettings store(QSettings::IniFormat, QSettings::UserScope, tr("media"), tr("media-player"));
+    //    store.beginGroup("recent");
+    //    store.setValue("media", "test1");
+    //    store.setValue("media", "test2");
+    //    store.setValue("media", "test3");
+    //    store.endGroup();
+    //here store the playlist
+    
+    int count = player->getPlaylist()->mediaCount();
+    int current = player->getPlaylist()->currentIndex();
+    if(count > 0) {
+        QFile file(STORAGE);
+        file.open(QIODevice::Truncate | QIODevice::WriteOnly);
+        QXmlStreamWriter stream(&file);
+        stream.setAutoFormatting(true);
+        stream.writeStartDocument();
+        
+        stream.writeStartElement("medias");
+        stream.writeAttribute("date", QDate::currentDate().toString("yyyy-MM-dd"));
+        for(int i = 0; i < count;i ++) {
+            if(i == current) {
+                stream.writeStartElement("media");
+                stream.writeAttribute("actived", "actived");
+                stream.writeAttribute("duration", tr("%1").arg(player->getPlayer()->duration()));
+                stream.writeCharacters(player->getPlaylist()->media(i).canonicalUrl().toString());
+                stream.writeEndElement();
+            }
+            else 
+                stream.writeTextElement("media", player->getPlaylist()->media(i).canonicalUrl().toString());
+        }
+        stream.writeEndElement(); // bookmark
+        stream.writeEndDocument();
+        file.close();
+    }
+    
+    event->accept();
+}
+
+Window::~Window() {}
