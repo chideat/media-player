@@ -5,56 +5,51 @@
         <link type="text/css" rel="stylesheet" href="css/main.css" />
     </head>
     <body>
-        <div id="head" class="panel">
-            <div id="logo"></div>
-            <div id="song-info">
-                <span id="title">media-player</span>
+        <div id="body">
+            <div id="head" class="panel">
+                <div id="logo"></div>
+                <div id="song-info"><span id="title">media-player</span></div>
             </div>
-        </div>
-        <div id="main">
-            <!-- list -->
-            <div id="leftCol">
-                <div>默认列表</div>
-                <div id="attPic" style="display: none">
-                    <div>
-                        <img alt="yahoo" id="attPicImg" width="96" height="96" />
-                        <canvas id="attPicCan" width="96" height="96" />
-                    </div>
-                </div>            
-            </div>
-            <!-- center -->
-            <div id="centerCol">
-                <div id="tab"></div>
-                <div id="contentList">
-                     <div id="tableHead"></div>
+            <div id="main">
+                <!-- list -->
+                <div id="leftCol">
+                    <div>默认列表</div>
+                    <div id="attPic" style="display: none">
+                        <div>
+                            <img alt="yahoo" id="attPicImg" width="96" height="96" />
+                            <canvas id="attPicCan" width="96" height="96" />
+                        </div>
+                    </div>            
+                </div>
+                <!-- center -->
+                <div id="centerCol">
+                    <div id="tab"></div>
                      <div id="mediaList" current="-1">
                          <!-- div class="odd mediaRow"  id="1"><div class="c0">任逍遥</div><div class="c1">任贤齐</div></div -->
                      </div>
                 </div>
             </div>
-        </div>
-        <div id="foot" class="panel">
-            <div id="process">
-                <strong class="bar" style="width:0px;" id="processing" interval="1000"></strong>
+            <!-- foot -->
+            <div id="foot" class="panel">
+                <div id="process">
+                    <strong class="bar" style="width:0px;" id="processing" interval="1000"></strong>
+                </div>
+                <div id="action">
+                        <div id="previous"><div class="button"><img src="qrc:/img/previous.png" ></img></div></div>
+                        <div id="playPause"><div class="button"><img src="qrc:/img/play.png" ></img></div></div>
+                        <div id="next"><div class="button"><img src="qrc:/img/next.png" ></img></div></div>
+                </div>
+                <div id="volume">
+                    <a id="volume-mute" href="#"><img src="qrc:/img/volume-low.png"></img></a>
+                    <div id="volume-slider"  ><strong class="bar" style="width:0%;" id="voluming"></strong></div>
+                </div>
+                <ul id="playmode">
+                    <li id="random-mode" class="buttons_2" pri="4"><a href="#"><img src="qrc:/img/random.png"></img></a></li>
+                    <li id="signal-mode" class="buttons_2" pri="1"><a href="#"><img src="qrc:/img/signal.png"></img></a></li>
+                    <li id="repeat-mode" class="buttons_2" pri="3"><a href="#"><img src="qrc:/img/repeat.png"></img></a></li>
+                </ul>                
+                <div id="addMedia"><a href="#"><img src="qrc:/img/add.png"></img></a></div>
             </div>
-            <div id="action">
-                <ul class="play-btn">
-                    <li id="previous" class="buttons_1"><a href="#"><img src="qrc:/img/previous.png" ></img></a></li>
-                    <li id="playPause" class="buttons_1"><a href="#"><img src="qrc:/img/play.png" ></img></a></li>
-                    <li id="next" class="buttons_1"><a href="#"><img src="qrc:/img/next.png" ></img></a></li>
-                </ul>
-            </div>
-            <div id="volume">
-                <a id="volume-mute" href="#"><img src="qrc:/img/volume-low.png"></img></a>
-                <div id="volume-slider"  ><strong class="bar" style="width:0%;" id="voluming"></strong></div>
-            </div>
-            <ul id="playmode">
-                <li id="random-mode" class="buttons_2" pri="4"><a href="#"><img src="qrc:/img/random.png"></img></a></li>
-                <li id="signal-mode" class="buttons_2" pri="1"><a href="#"><img src="qrc:/img/signal.png"></img></a></li>
-                <li id="repeat-mode" class="buttons_2" pri="3"><a href="#"><img src="qrc:/img/repeat.png"></img></a></li>
-            </ul>                
-            <div id="addMedia"><a href="#"><img src="qrc:/img/add.png"></img></a></div>
-        
         </div>
         <script type="text/javascript" src="qrc:/js/jquery.min.js"></script>
         <script type="text/javascript" src="qrc:/js/functions.js"></script>

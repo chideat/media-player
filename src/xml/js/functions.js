@@ -1,4 +1,4 @@
-function getMediaCount() {
+﻿function getMediaCount() {
     return $("#mediaList > div").size();
 }
 
@@ -49,7 +49,7 @@ function stateChanged(state) {
         $("#playPause").addClass("playing").find('img').attr('src', 'qrc:/img/pause.png');
         break;
     default:
-        $("#playPause").removeClass("playing").find('img').attr('src', 'qrc:/img/play.png');;
+        $("#playPause").removeClass("playing").find('img').attr('src', 'qrc:/img/play.png');
     }
 }
 
@@ -58,6 +58,13 @@ $(document).ready(function(){
     Player.mutedChanged.connect(mutedChanged);
     Operator.stateChanged.connect(stateChanged);
     Operator.updateMetaData.connect(updateMetaData);
+    
+    $(".button").on("mouseover", function(){
+        $(this).css('border-color', '#DEDEDE');
+    })
+    .on("mouseleave", function() {
+        $(this).css("border-color", "#9D9D9D");
+    });
     
     /* call Windows */
     $("#addMedia").click(function(){

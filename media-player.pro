@@ -1,6 +1,5 @@
-QMAKE_CXXFLAGS += -std=c++0x
-
 QT += multimedia  widgets webkitwidgets
+CONFIG += c++11
 
 LIBS += -L/usr/lib/ -ltag
 INCLUDEPATH += /usr/include/taglib/

@@ -29,7 +29,7 @@ using namespace TagLib;
 
 Window::Window(QWebView *parent):QWebView(parent) {
     hide();
-    setFixedSize(800, 510);
+    //setFixedSize(800, 510);
     setWindowTitle(tr("media-player"));
     setWindowIcon(QIcon(":/img/media.png"));
     this->setContextMenuPolicy(Qt::NoContextMenu);
