@@ -137,3 +137,32 @@ $(document).ready(function(){
     window.setInterval(updatePosition, $("#processing").attr('interval'));
     
 });
+
+
+/*
+ var canvas = document.getElementById("volume");
+      var context = canvas.getContext("2d");
+      context.beginPath();
+      context.moveTo(30, 30);
+      context.arc(30, 30, 30, 0, Math.PI * 2, false);
+      context.fillStyle="#AFAFAF";
+      context.fill();
+      
+      context.fillStyle="#DEDEDE";
+      context.beginPath();
+      context.moveTo(30, 30);
+      context.arc(30, 30, 30, 0, Math.PI * 0.6, true);
+      context.fill();
+      context.fillStyle="#9A9A9A";
+
+      context.beginPath();
+      context.moveTo(30, 30);
+      context.arc(30, 30, 25, 0, Math.PI * 2, false);
+      context.fill();
+      //context.clearRect(0, 0, 80, 80);
+    		var img = new Image();
+      img.src="volume-high.png";
+      img.onload = function() {
+      	context.drawImage(img, 18, 18, 24, 24);
+      }
+*/
