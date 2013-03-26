@@ -9,16 +9,16 @@ function updateMetaData(index) {
     .find("#processing").attr("step", 
                               ($("#process").width() * $("#process").find("#processing").attr("interval")) 
                               / ($("#process").attr("duration") * 1000)).animate({width: 0}, 400);
-
-
     
-//    // update attached picture
-//    alert("here1" + Operator.pixmap);
-//    Operator.pixmap.assignToHTMLImageElement(document.getElementById("attPicImg"));
-//    alert("here2");
-////    var context = document.getElementById("attPicCan").getContext("2d");
-////    context.putImageData(myObject.myPixMap.toImageData());
-//    alert("here");
+    
+    
+    //    // update attached picture
+    //    alert("here1" + Operator.pixmap);
+    //    Operator.pixmap.assignToHTMLImageElement(document.getElementById("attPicImg"));
+    //    alert("here2");
+    ////    var context = document.getElementById("attPicCan").getContext("2d");
+    ////    context.putImageData(myObject.myPixMap.toImageData());
+    //    alert("here");
 }
 
 function updatePosition() {
@@ -26,7 +26,7 @@ function updatePosition() {
         $("#processing").css("width", $("#processing").width() + parseFloat($("#processing").attr("step")));
     }
     else {
-        $("#processing").attr("width", 0);
+        $("#processing").css("width", 0);
     }
 }
 
@@ -51,6 +51,49 @@ function stateChanged(state) {
     default:
         $("#playPause").removeClass("playing").find('img').attr('src', 'qrc:/img/play.png');
     }
+}
+
+function volume(value, flag) {
+    var width = $("#volume").width(), height = $("#volume").height();
+    var radius = (width >= height ? height:width)/2;
+    var canvas = document.getElementById("volume");
+    var context = canvas.getContext("2d");
+    if(flag) {
+        context.clearRect(0, 0, width, height);
+    }
+    context.beginPath();
+    context.moveTo(width/2, height/2);
+    context.arc(width/2, height/2, radius, 0, Math.PI * 2, false);
+    context.fillStyle="#898989";
+    context.fill();
+    
+    context.fillStyle="#CDCDCD";
+    context.beginPath();
+    context.moveTo(width/2, height/2);
+    context.arc(width/2, height/2, radius, 0,(value>0?value : 0) * Math.PI * 2, false);
+    context.fill();
+    context.fillStyle="#9A9A9A";
+    
+    context.beginPath();
+    context.moveTo(width/2, height/2);
+    context.arc(width/2, height/2, radius - 5, 0, Math.PI * 2, false);
+    context.fill();
+    
+    var img = new Image();
+    img.src="qrc:/img/volume-" + (value > 0.8 ? "high" : (value > 0.4) ? "medium" : (value > 0.05) ? "low" : (value < 0) ? "muted":"zero") + ".png";
+    img.onload = function() {
+        context.drawImage(img, radius - 12, radius - 12, 24, 24);
+    }
+}
+
+function wheelScroll(event) {
+    Operator.setMuted(false);
+    var interval = 0.05;
+    var value =  Number($("#volume").attr("volume")) + interval * (event.wheelDelta > 0 ? 1 : -1);
+    value = (value < 0 ? 0.01 : (value > 1 ? 0.99 : value));
+    volume(value, true);
+    Operator.setVolume(value);
+    $("#volume").attr("volume", value);
 }
 
 $(document).ready(function(){
@@ -84,10 +127,10 @@ $(document).ready(function(){
     });
     
     $("#mediaList").bind('dblclick', function(event) {
-       if($(event.target).parent().is(".mediaRow")) {
-           var $target = $(event.target).parent();
-           Operator.playOpause($target.attr("id"));
-       }
+        if($(event.target).parent().is(".mediaRow")) {
+            var $target = $(event.target).parent();
+            Operator.playOpause($target.attr("id"));
+        }
     });
     
     $("#random-mode, #repeat-mode, #signal-mode").bind("click", function(){
@@ -97,72 +140,29 @@ $(document).ready(function(){
     });
     
     $("#process").click(function(event){
-         if(parseInt($("#mediaList").attr("current")) >= 0) {
-             Operator.setPosition(event.offsetX, $(this).width());
-              $("#processing").css("width", event.offsetX);
-         }
+        if(parseInt($("#mediaList").attr("current")) >= 0) {
+            Operator.setPosition(event.offsetX, $(this).width());
+            $("#processing").css("width", event.offsetX);
+        }
     });
-    
-    $("#volume-slider").click(function(event){
-        var x = event.offsetX;
-        var width = $(this).width();
-        var per = x/width;
-        Operator.setVolume(x, width);
-        $(this).find("strong").animate({width: 100 * per +  "%"}, 300).show();
-        if(per > 0.7)
-            $("#volume-mute").find("img").attr("src", "qrc:/img/volume-high.png");
-        else if(per > 0.3)
-            $("#volume-mute").find("img").attr("src", "qrc:/img/volume-medium.png");
-        else if(per >0 )
-            $("#volume-mute").find("img").attr("src", "qrc:/img/volume-low.png");
-        else 
-            $("#volume-mute").find("img").attr("src", "qrc:/img/volume-zero.png");
-    });
-    
-    $("#volume-mute").click(function(){
-            Operator.setMuted();
-    });
-    
-//    $(".buttons_2").click(function(){
-//        $(".buttons_2").removeClass("actived");
-//        $(this).addClass("actived");
-//    });
     
     //init
-    Operator.setVolume(0.2);
-    $("#volume-mute").find("img").attr("src", "qrc:/img/volume-low.png");
-    $("#voluming").animate({width: "20%"}, 300).show();
+    $("#volume").on("click", function(){
+        if($(this).hasClass("muted")) {
+            $(this).removeClass("muted");
+            volume(Number($(this).attr("volume")), true);
+            Operator.setMuted(false);
+        }
+        else {
+            $(this).addClass("muted");
+            Operator.setMuted(true);
+            volume(-1, true);
+        }
+    }).attr("volume", 0.1);
+    volume(0.1, false);
+    Operator.setVolume(0.1);
 
     // call timer 
     window.setInterval(updatePosition, $("#processing").attr('interval'));
-    
+    document.getElementById("volume").onmousewheel=wheelScroll;
 });
-
-
-/*
- var canvas = document.getElementById("volume");
-      var context = canvas.getContext("2d");
-      context.beginPath();
-      context.moveTo(30, 30);
-      context.arc(30, 30, 30, 0, Math.PI * 2, false);
-      context.fillStyle="#AFAFAF";
-      context.fill();
-      
-      context.fillStyle="#DEDEDE";
-      context.beginPath();
-      context.moveTo(30, 30);
-      context.arc(30, 30, 30, 0, Math.PI * 0.6, true);
-      context.fill();
-      context.fillStyle="#9A9A9A";
-
-      context.beginPath();
-      context.moveTo(30, 30);
-      context.arc(30, 30, 25, 0, Math.PI * 2, false);
-      context.fill();
-      //context.clearRect(0, 0, 80, 80);
-    		var img = new Image();
-      img.src="volume-high.png";
-      img.onload = function() {
-      	context.drawImage(img, 18, 18, 24, 24);
-      }
-*/

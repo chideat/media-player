@@ -29,9 +29,8 @@ public slots:
     void next();
     void setMode(int mode);
     void setPosition(int x, int width);
-    void setVolume(int x, int width);
     void setVolume(double per);
-    void setMuted();
+    void setMuted(bool flag);
     void run(QString label, QStringList medias, int c);
 protected:
     void closeEvent(QCloseEvent *);

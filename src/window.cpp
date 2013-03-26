@@ -168,19 +168,11 @@ void Window::setPosition(int x, int width) {
 }
 
 void Window::setVolume(double per) {
-    player->getPlayer()->setVolume(MAX_VOLUME * per);
+    player->getPlayer()->setVolume(int(MAX_VOLUME * per));
 }
 
-void Window::setVolume(int x, int width) {
-    //qDebug()<<(60 * x)/ width;
-    player->getPlayer()->setVolume((MAX_VOLUME * x)/ width);
-}
-
-void Window::setMuted() {
-    if(player->getPlayer()->isMuted())
-        player->getPlayer()->setMuted(false);
-    else 
-        player->getPlayer()->setMuted(true);
+void Window::setMuted(bool flag) {
+        player->getPlayer()->setMuted(flag);
 }
 
 QWebElement Window::getElement(QString label) {
