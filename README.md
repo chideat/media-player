@@ -13,12 +13,10 @@ technology
 
 going to do
 ------------------
-* add storage function
+* improve storage function
 * show the attached picture in the medias
 * add remove function
-* and any other functions 
 
-problems
---------------------
-* failed to add the attached picture to webkit
-* 
+new jobs
+---------
+* replace html with QML
