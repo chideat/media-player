@@ -15,12 +15,14 @@ SOURCES += \
     src/main.cpp \
     src/player.cpp \
     src/load.cpp \
-    src/window.cpp
+    src/window.cpp \
+    lib/config.cpp
 
 HEADERS += \ 
     src/player.h \
     src/load.h \
-    src/window.h
+    src/window.h \
+    lib/config.h
 
 RESOURCES += \
     src/xml/html.qrc
